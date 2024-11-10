@@ -1,15 +1,17 @@
 from aiogram import F, Router
 from aiogram.types import Message, CallbackQuery
 from aiogram.filters import CommandStart
+import app.keyboards as kb
 
 from app.text import webinar_text
-import app.keyboards as kb
+from app.database.requests import set_user
 
 user = Router()
 
 @user.message(CommandStart())
 async def cmd_start(message: Message):
-    await message.answer(text=webinar_text, reply_markup=kb.main_inline)
+    await set_user(message.from_user.id)
+    await message.answer(text=webinar_text, reply_markup=kb.main)
 
 @user.message(F.text == 'Купить подписку 📈')
 async def echo(message: Message):
